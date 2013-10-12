@@ -44,7 +44,7 @@ I then hand tuned the Same letters to sound nice in my own language. This is wha
  vot but vod vud bom vum von vun boc buc vog vug vop vup vox bux bof vuf boz vuz vor vur
  zot sut zod sud zom zum son zun soc suc zog zug zop zup sox sux sof zuf sov zuv zor sul
  lot lut rod rud rom rum lon run loc ruc rog rug rop lup lox lux rof ruf rov luv loz ruz
- ```
+```
 
  The order is generated. To work for Urbit, or anything else really, these need to be permuted. You'll note that `zod` is hanging out in the low end as requested. 256 could be ~diznoc, for rough continuity. Or ~daznoc, I chose `das` but this is of course arbitrary.
 
@@ -71,3 +71,56 @@ for (var i = 0 ; i < consonants.length; i ++) {
 }
 ```
 If that ain't dirty pool, what is?
+
+Let's permute in the same cavalier fashion:
+
+```javascript
+var tags = [["yod", "yud", "yom", "yum", "yon", "yun", "yoc", "yuc", "yog", "yug", "yop", "yup", "yox", "yux", "yof", "yuf", "yov", "yuv", "yos", "yuz", "yol", "yur"],
+ ["dot", "dut", "@@@", "dum", "don", "dun", "doc", "duc", "dog", "dug", "dop", "dup", "dox", "dux", "dof", "duf", "dov", "duv", "dos", "duz", "dol", "dur"],
+ ["mot", "mut", "mod", "mud", "mon", "mun", "moc", "muc", "mog", "mug", "mop", "mup", "mox", "mux", "mof", "muf", "mov", "muv", "mos", "muz", "mor", "mul"],
+ ["not", "nut", "nod", "nud", "nom", "num", "noc", "nuc", "nog", "nug", "nop", "nup", "nox", "nux", "nof", "nuf", "nov", "nuv", "nos", "nuz", "nol", "nur"],
+ ["kot", "kut", "kod", "kud", "kom", "kum", "kon", "kun", "kog", "kug", "kop", "kup", "kox", "kux", "kof", "kuf", "kov", "kuv", "kos", "kuz", "kol", "kur"],
+ ["got", "gut", "god", "gud", "gom", "gum", "gon", "gun", "goc", "guc", "gop", "gup", "gox", "gux", "gof", "guf", "gov", "guv", "gos", "guz", "gol", "gur"],
+ ["pot", "put", "pod", "pud", "pom", "pum", "pon", "pun", "poc", "puc", "pog", "pug", "pox", "pux", "pof", "puf", "pov", "puv", "pos", "puz", "por", "pul"],
+ ["@@@", "@@@", "xod", "xud", "xom", "xum", "xon", "xun", "xoc", "xuc", "xog", "xug", "xop", "xup", "xof", "xuf", "xov", "xuv", "xoz", "xus", "xor", "xul"],
+ ["fot", "fut", "fod", "fud", "fom", "fum", "fon", "fun", "@@@", "fuc", "@@@", "fug", "@@@", "fup", "fox", "fux", "fov", "fuv", "foz", "fus", "fol", "fur"],
+ ["vot", "but", "vod", "vud", "bom", "vum", "von", "vun", "boc", "buc", "vog", "vug", "vop", "vup", "vox", "bux", "bof", "vuf", "boz", "vuz", "vor", "vur"],
+ ["zot", "sut", "zod", "sud", "zom", "zum", "son", "zun", "soc", "suc", "zog", "zug", "zop", "zup", "sox", "sux", "sof", "zuf", "sov", "zuv", "zor", "sul"],
+ ["lot", "lut", "rod", "rud", "rom", "rum", "lon", "run", "loc", "ruc", "rog", "rug", "rop", "lup", "lox", "lux", "rof", "ruf", "rov", "luv", "loz", "ruz"]];
+ 
+ var permutes = [["yod", "yud", "yom", "yum", "yon", "yun", "yoc", "yuc", "yog", "yug", "yop", "yup", "yox", "yux", "yof", "yuf", "yov", "yuv", "yos", "yuz", "yol", "yur"],
+ ["dot", "dut", "@@@", "dum", "don", "dun", "doc", "duc", "dog", "dug", "dop", "dup", "dox", "dux", "dof", "duf", "dov", "duv", "dos", "duz", "dol", "dur"],
+ ["mot", "mut", "mod", "mud", "mon", "mun", "moc", "muc", "mog", "mug", "mop", "mup", "mox", "mux", "mof", "muf", "mov", "muv", "mos", "muz", "mor", "mul"],
+ ["not", "nut", "nod", "nud", "nom", "num", "noc", "nuc", "nog", "nug", "nop", "nup", "nox", "nux", "nof", "nuf", "nov", "nuv", "nos", "nuz", "nol", "nur"],
+ ["kot", "kut", "kod", "kud", "kom", "kum", "kon", "kun", "kog", "kug", "kop", "kup", "kox", "kux", "kof", "kuf", "kov", "kuv", "kos", "kuz", "kol", "kur"],
+ ["got", "gut", "god", "gud", "gom", "gum", "gon", "gun", "goc", "guc", "gop", "gup", "gox", "gux", "gof", "guf", "gov", "guv", "gos", "guz", "gol", "gur"],
+ ["pot", "put", "pod", "pud", "pom", "pum", "pon", "pun", "poc", "puc", "pog", "pug", "pox", "pux", "pof", "puf", "pov", "puv", "pos", "puz", "por", "pul"],
+ ["@@@", "@@@", "xod", "xud", "xom", "xum", "xon", "xun", "xoc", "xuc", "xog", "xug", "xop", "xup", "xof", "xuf", "xov", "xuv", "xoz", "xus", "xor", "xul"],
+ ["fot", "fut", "fod", "fud", "fom", "fum", "fon", "fun", "@@@", "fuc", "@@@", "fug", "@@@", "fup", "fox", "fux", "fov", "fuv", "foz", "fus", "fol", "fur"],
+ ["vot", "but", "vod", "vud", "bom", "vum", "von", "vun", "boc", "buc", "vog", "vug", "vop", "vup", "vox", "bux", "bof", "vuf", "boz", "vuz", "vor", "vur"],
+ ["zot", "sut", "zod", "sud", "zom", "zum", "son", "zun", "soc", "suc", "zog", "zug", "zop", "zup", "sox", "sux", "sof", "zuf", "sov", "zuv", "zor", "sul"],
+ ["lot", "lut", "rod", "rud", "rom", "rum", "lon", "run", "loc", "ruc", "rog", "rug", "rop", "lup", "lox", "lux", "rof", "ruf", "rov", "luv", "loz", "ruz"]];
+ 
+ var i, j = 0 ;
+ 
+ for (i = 0 ; i < tags.length; i++) {
+     for ( j = 0; j < tags[i].length; j++) {
+         right = ((i+j)* 5) % tags[i].length;
+         tags[i][j] = permutes[i][right];
+     }
+ }
+ 
+  
+ for ( j = 0; j < tags[0].length; j++) {
+     for (i = 0 ; i < tags.length; i++) {       
+         left = ((i+j) * 7) % tags.length;
+         permutes[i][j] = tags[left][j];
+         }
+  }
+    
+for (i = 0; i < tags.length; i++) {
+    console.log(tags[i].join())
+}
+```
+
+That'll do it!
