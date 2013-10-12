@@ -24,8 +24,8 @@ I then hand tuned the Same letters to sound nice in my own language. This is wha
  cot cut cod cud com cum con cun cog cug cop cup cox cux cof cuf cov cuv cos cuz col cur 
  got gut god gud gom gum gon gun goc guc gop gup gox gux gof guf gov guv gos guz gol gur 
  pot put pod pud pom pum pon pun poc puc pog pug pox pux pof puf pov puv pos puz por pul 
-         xod xud xom xum xon xun xoc xuc xog xug xop xup xof xuf xov xuv xoz xus xor xul
- fot fut fod fud fom fum fon fun     fuc     fug     fup fox fux fov fuv foz fus fol fur
+     xot xod xud xom xum xon xun xoc xuc xog xug xop xup xof xuf xov xuv xoz xus xor xul
+ fot fut fod fud fom fum fon fun             fug     fup fox fux fov fuv foz fus fol fur
  vot but vod vud bom vum von vun boc buc vog vug vop vup vox bux bof vuf boz vuz vor vur
  zot sut zod sud zom zum son zun soc suc zog zug zop zup sox sux sof zuf sov zuv zor sul
  lot lut rod rud rom rum lon run loc ruc rog rug rop lup lox lux rof ruf rov luv loz ruz
