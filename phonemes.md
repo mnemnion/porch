@@ -10,7 +10,7 @@ Vowels: **a i o u**. We reserve **e** for shwa type sounds in between syllables,
 
 Different letters form unique pairs. We may use either of the Same letters, but do not consider them distinct in constructing a phoneme. E.g, since we have `zod`, we may not have `sod`.
 
-This gives us, in essence, 12 consonants. 132 of which we can use, so we don't have duplication like `bub`. 
+This gives us, in essence, 12 consonants. 132 pairs of which we can use, so we don't have duplication like `bub`. 
 
 If we assign two vowels to the low end, and two to the high, we get 264 symbols for each. We remove six that sound sweary in English. Other languages may amuse themselves accordingly. 
 
