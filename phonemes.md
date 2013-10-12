@@ -18,10 +18,10 @@ I then hand tuned the Same letters to sound nice in my own language. This is wha
 
 ```
  tod tud tom tum ton tun toc tuc tog tug top tup tox tux tof tuf tov tuv tos tuz tol tur 
- dot dut     dum don dun doc duc dog dug dop dup dox dux dof duf dov duv dos duz dol dur 
+ dot dut dom dum don dun doc duc dog dug dop dup dox dux dof duf dov duv dos duz dol dur 
  mot mut mod mud mon mun moc muc mog mug mop mup mox mux mof muf mov muv mos muz mor mul
  not nut nod nud nom num noc nuc nog nug nop nup nox nux nof nuf nov nuv nos nuz nol nur 
- cot cut cod cud com cum con cun cog cug cop cup cox cux cof cuf cov cuv cos cuz col cur 
+ cot cut cod cud com     con cun cog cug cop cup cox cux cof cuf cov cuv cos cuz col cur 
  got gut god gud gom gum gon gun goc guc gop gup gox gux gof guf gov guv gos guz gol gur 
  pot put pod pud pom pum pon pun poc puc pog pug pox pux pof puf pov puv pos puz por pul 
      xot xod xud xom xum xon xun xoc xuc xog xug xop xup xof xuf xov xuv xoz xus xor xul
