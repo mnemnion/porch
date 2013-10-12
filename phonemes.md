@@ -44,4 +44,4 @@ I then hand tuned the Same letters to sound nice in my own language. This is wha
  lat lit rad rid ram rim lan rin lac ric rag rig rap lip lax lix raf rif rav liv laz riz
  ```
 
- The order is generated. To work for Urbit, or anything else really, these need to be permuted. You'll note that `zod` is hanging out in the low end as requested. 
+ The order is generated. To work for Urbit, or anything else really, these need to be permuted. You'll note that `zod` is hanging out in the low end as requested. 256 could be ~diznoc, for rough continuity. Or ~daznoc, I chose `das` but this is of course arbitrary.
