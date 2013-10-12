@@ -47,3 +47,25 @@ I then hand tuned the Same letters to sound nice in my own language. This is wha
  The order is generated. To work for Urbit, or anything else really, these need to be permuted. You'll note that `zod` is hanging out in the low end as requested. 256 could be ~diznoc, for rough continuity. Or ~daznoc, I chose `das` but this is of course arbitrary.
 
 This is only rough on English in that three letter syllables beginning with x are hen's teeth. This will encourage us to pronounce `x` "sh", which is the only preferred phonetic realization that will be counterintuitive for English speakers. "ch" and "loogie" are also ok.
+
+For posterity, I made the pairs thus:
+
+```javascript
+var consonants = ["t", "d", "m", "n", "c", "g", "p", "x", "f", "v", "z", "r"];
+
+var vowels = ["a", "i"]
+
+var pairs = [];
+
+
+for (var i = 0 ; i < consonants.length; i ++) {
+    for (var j = 0 ; j < consonants.length; j ++) {
+        for (var a = 0; a < vowels.length; a++) {
+            if (j != i) {
+            console.log(consonants[i] + vowels[a] + consonants[j]);  
+            }
+        }
+    }
+}
+```
+If that ain't dirty pool, what is?
