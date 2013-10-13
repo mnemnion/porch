@@ -103,24 +103,39 @@ var tags = [["yod", "yud", "yom", "yum", "yon", "yun", "yoc", "yuc", "yog", "yug
  
  var i, j = 0 ;
  
- for (i = 0 ; i < tags.length; i++) {
+for (i = 0 ; i < tags.length; i++) {
      for ( j = 0; j < tags[i].length; j++) {
-         right = ((i+j)* 5) % tags[i].length;
+         right = ((i+j)* 13) % tags[i].length;
          tags[i][j] = permutes[i][right];
      }
- }
+}
  
   
- for ( j = 0; j < tags[0].length; j++) {
+for ( j = 0; j < tags[0].length; j++) {
      for (i = 0 ; i < tags.length; i++) {       
          left = ((i+j) * 7) % tags.length;
          permutes[i][j] = tags[left][j];
          }
-  }
+}
+  
+//one more munge
+
+for (i = 0 ; i < tags.length; i++) {
+     for ( j = 0; j < tags[i].length; j++) {
+        if (j%2 === 0) { 
+            tags[i][j]= permutes[(i+3) % tags.length][j];
+        } else {
+            tags[i][j]= permutes[i][j];
+        }
+     }
+}
+
     
 for (i = 0; i < tags.length; i++) {
     console.log(tags[i].join())
 }
+     
+     
 ```
 
 That'll do it!
