@@ -14,7 +14,7 @@ Different letters form unique pairs. We may use either of the Same letters, but 
 
 This gives us, in essence, 12 consonants. 132 pairs of which we can use, so we don't have duplication like `bub`. To avoid a couple hard collisions, we use `t` and `c` at the end. To begin, we use `y` and `k`. `c` and `k` are phonemically the same, but tackat is easier to parse than taccat. Both elide into one `k`, which is in practice fine. 
 
-If we assign two vowels to the low end, and two to the high, we get 264 symbols for each. We remove six that sound sweary in English. Other languages may amuse themselves accordingly. 
+If we assign two vowels to the low end, and two to the high, we get 264 symbols for each. We remove eight that sound sweary in English. Other languages may amuse themselves accordingly. 
 
 I then hand tuned the Same letters to sound nice in my own language. This is what I've come up with:
 
