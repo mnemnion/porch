@@ -148,25 +148,28 @@ pox,kur,fol,pun,son,fux,yox,sut,mor,yuc,kon,muf,pof,kut,fot,puc,soc,fuv,yof,sud,
 dux,rod,nur,dog,gun,nov,xuf,god,but,xog,ruc,boz,duf,rom,nut,dop,guc,nos,xuv,gom,vud,xop
 fov,pud,vun,fug,yog,zuv,mov,yum,kod,mup,pog,kuz,foz,pum,zom,fup,yop,sul,mos,yun,kom,mux
 nuv,don,gud,nox,xug,gol,vuz,xon,rum,vox,dup,lot,nuz,doc,gum,nof,xup,got,vur,xoc,run,bof
-zor,fun,yon,sux,mox,yur,kol,muc,pon,kuf,fox,put,zot,fuc,yoc,zuf,mof,yud,kot,mug,poc,kuv
+zor,fun,yon,sux,mox,yur,kol,muc,pon,kuf,fox,put,zot,@@@,yoc,zuf,mof,yud,kot,mug,poc,kuv
 gur,nog,xun,gov,bux,xod,lut,vog,duc,rov,nuf,@@@,gut,nop,xuc,gos,vuf,xom,rud,vop,dug,loz
 yod,zug,mog,yuv,kov,mud,pod,kup,@@@,puz,sov,fum,yom,zup,mop,yuz,kos,mun,pom,kux,@@@,pul
-xud,gox,vug,xor,luv,von,dum,lox,nup,dol,guz,xov,xum,gof,vup,@@@,ruz,boc,dun,rof,nux,dot
+xud,gox,vug,xor,luv,von,@@@,lox,nup,dol,guz,xov,xum,gof,vup,@@@,ruz,boc,dun,rof,nux,dot
 mon,yux,kox,mul,por,kun,fon,puf,sox,fut,yol,suc,moc,yuf,kof,mut,pot,kug,@@@,puv,sof,fud
 
-diz,xav,lix,vad,dir,rag,nic,dav,gif,nad,@@@,gap,bic,xaz,rif,bam,dit,rap,nig,das,giv,nam
+daz,xav,lix,vad,dir,rag,nic,dav,gif,nad,@@@,gap,bic,xaz,rif,bam,dit,rap,nig,vin,giv,nam
 kag,miv,pav,kid,fad,pig,zag,fis,yav,zim,mad,yip,kap,miz,pas,kim,fam,pix,zap,fir,yas,zin
-rig,var,div,lan,nid,dax,gip,nal,xis,gan,vim,xaf,lip,vat,vin,lac,nim,daf,gix,nat,xil,gac
+rig,var,div,lan,nid,dax,gip,nal,xis,gan,vim,xaf,lip,vat,dis,lac,nim,daf,gix,nat,xil,gac
 pax,kir,fal,pin,san,fix,yax,sit,mar,yic,kan,mif,paf,kit,fat,pic,sac,fiv,yaf,sid,mat,yig
 dix,rad,nir,dag,gin,nav,xif,gad,bit,xag,ric,baz,dif,ram,nit,dap,gic,nas,xiv,gam,vid,xap
 fav,pid,zad,fig,yag,ziv,mav,yim,kad,mip,pag,kiz,faz,pim,zam,fip,yap,sil,mas,yin,kam,mix
 niv,dan,gid,nax,xig,gal,viz,xan,rim,vax,dip,lat,niz,dac,gim,naf,xip,gat,vir,xac,rin,baf
 zar,fin,yan,six,max,yir,kal,mic,pan,kif,fax,pit,zat,fic,yac,zif,maf,yid,kat,mig,pac,kiv
-gir,nag,xin,gav,bix,xad,lit,vag,dic,rav,nif,@@@,git,nap,xic,gas,vif,xam,rid,vap,dig,laz
+gir,nag,xin,gav,bix,xad,lit,vag,@@@,rav,nif,@@@,git,nap,xic,gas,vif,xam,rid,vap,dig,laz
 yad,zig,mag,yiv,kav,mid,pad,kip,@@@,piz,sav,fim,yam,zip,map,yiz,kas,min,pam,kix,@@@,pil
 xid,gax,vig,xar,liv,van,dim,lax,nip,dal,giz,nac,xim,gaf,vip,@@@,riz,bac,din,raf,nix,dat
-man,yix,kax,mil,par,kin,fan,pif,sax,fit,yal,sic,mac,yif,kaf,mit,pat,kig,@@@,piv,saf,fid
+man,yix,kax,mil,par,kin,fan,pif,sax,fit,yal,sic,mac,@@@,kaf,mit,pat,kig,@@@,piv,saf,fid
+
 ```
+
+With a little hand-tuning so that ~zod is still zero and ~daznoc is now ~doznec or 256. A touch of the familiar to carry us through.
 
 Which we can format for Hoon compatibility:
 
