@@ -168,4 +168,47 @@ xid,gax,vig,xar,liv,van,dim,lax,nip,dal,giz,nac,xim,gaf,vip,@@@,riz,bac,din,raf,
 man,yix,kax,mil,par,kin,fan,pif,sax,fit,yal,sic,mac,yif,kaf,mit,pat,kig,@@@,piv,saf,fid
 ```
 
-Which we can format for Hoon compatibility.
+Which we can format for Hoon compatibility:
+
+```
+++  po
+  ~/  %po
+  =+  :-  ^=  sis
+          'dazxavlixvaddirragnicdavgifnadgapbicxazrifbamdit\
+          /rapnigvingivnamkagmivpavkidfadpigzagfisyavzimmad\
+          /yipkapmizpaskimfampixzapfiryaszinrigvardivlannid\
+          /daxgipnalxisganvimxaflipvatdislacnimdafgixnatxil\
+          /gacpaxkirfalpinsanfixyaxsitmaryickanmifpafkitfat\
+          /picsacfivyafsidmatyigdixradnirdagginnavxifgadbit\
+          /xagricbazdiframnitdapgicnasxivgamvidxapfavpidzad\
+          /figyagzivmavyimkadmippagkizfazpimzamfipyapsilmas\
+          /yinkammixnivdangidnaxxiggalvizxanrimvaxdiplatniz\
+          /dacgimnafxipgatvirxacrinbafzarfinyansixmaxyirkal\
+          /micpankiffaxpitzatficyaczifmafyidkatmigpackivgir\
+          /nagxingavbixxadlitvagravnifgitnapxicgasvifxamrid\
+          /vapdiglazyadzigmagyivkavmidpadkippizsavfimyamzip\
+          /mapyizkasminpamkixpilxidgaxvigxarlivvandimlaxnip\
+          /dalgiznacximgafviprizbacdinrafnixdatmanyixkaxmil\
+          /parkinfanpifsaxfityalsicmackafmitpatkigpivsaffid'
+      ^=  dex
+      'zodnocluxvoddurrognucdovgufnodgopbucxozrufbomdut\
+      /ropnugdosguvnomkogmuvpovkudfodpugzogfusyovzummod\
+      /yupkopmuzposkumfompuxzopfuryoszunrugvorduvlonnud\
+      /doxgupnolxusgonvumxoflupvotduzlocnumdofguxnotxul\
+      /gocpoxkurfolpunsonfuxyoxsutmoryuckonmufpofkutfot\
+      /pucsocfuvyofsudmotyugduxrodnurdoggunnovxufgodbut\
+      /xogrucbozdufromnutdopgucnosxuvgomvudxopfovpudvun\
+      /fugyogzuvmovyumkodmuppogkuzfozpumzomfupyopsulmos\
+      /yunkommuxnuvdongudnoxxuggolvuzxonrumvoxduplotnuz\
+      /docgumnofxupgotvurxocrunbofzorfunyonsuxmoxyurkol\
+      /mucponkuffoxputzotyoczufmofyudkotmugpockuvgurnog\
+      /xungovbuxxodlutvogducrovnufgutnopxucgosvufxomrud\
+      /vopduglozyodzugmogyuvkovmudpodkuppuzsovfumyomzup\
+      /mopyuzkosmunpomkuxpulxudgoxvugxorluvvonloxnupdol\
+      /guzxovxumgofvupruzbocdunrofnuxdotmonyuxkoxmulpor\
+      /kunfonpufsoxfutyolsucmocyufkofmutpotkugpuvsoffud'
+  |%
+```
+
+Indeed.
+
