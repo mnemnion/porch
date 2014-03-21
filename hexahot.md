@@ -84,7 +84,8 @@ The last wall has to be built and attached and the whole thing checked for leaks
 
 Building the removable wall is probably a matter of taking two pieces of insulation, folding thin yoga-style matting over the ends, and staple gunning it. Perhaps with some glue to keep the layers from sliding against each other. This is press-fit into the end and should provide a nice airtight seal. We hinge this with the bottom tarp, making a door that opens down but cannot be fully removed, to deal with the irregularity of the bottom pallet plane. 
 
-The water layers probably have to go in incrementally. The buckets can be laid empty and should be, since leaks are bad and this lets us check. This part is art. At the end, the last wall goes in, and Bob is your proverbial uncle. 
+The water layers probably have to go in incrementally. The buckets can be laid empty and should be, since leaks are bad and this lets us check. This part is art. 
 
+The very last step is to install the output fan box and test all the hardware. Then pop back in the bottom door and we are good to go. Actually to smoke-test the empty Hexahot, both fans need to be installed, but this most likely has to be undone to fit the water in. One backtrack in an assembly to run a unit test isn't so bad.
 
 
