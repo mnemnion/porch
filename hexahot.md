@@ -8,7 +8,7 @@ The space is defined, as usual for Hexayurts, by 4 x 8 sheet goods. The back is 
 
 The bottom volume is of course 24 cubic feet. The volume of the prism is half the volume of the rectangular solid, which, at 3 x 3 x 8, is 72 cubics, meaning an additional 36 ideal cubic feet. 24 + 36 gives 60 cubes of interior volume. 
 
-We fill this interior space to 80% with water, giving a holding capacity of 48 cubic feet. This is quite a bit of water, roughly 375 gallons or 1360 liters. We'll get to precise plumbing strategies later, but we want a mix of plastic and glass 'batteries', metal heat exhangers (olive oil cans work), and 5 gallon buckets plumbed to add and remove water. Most of the water is sealed and used only to hold heat. 
+We fill this interior space to 80% with water, giving a holding capacity of 48 cubic feet. This is quite a bit of water, roughly 375 gallons or 1360 liters. We'll get to precise plumbing strategies later, but we want a mix of plastic and glass 'batteries', metal heat exchangers (olive oil cans work), and 5 gallon buckets plumbed to add and remove water. Most of the water is sealed and used only to hold heat. 
 
 The 20% air is critical to system function; the water must be stacked to provide air gaps at each layer. 
 
@@ -19,13 +19,13 @@ If you think carefully, you'll account for 2.5/3.5 of the panels. The remaining 
 The gaps between panels must be insulated and carefully sealed. The interior and exterior seams should both be taped, and the overall shape constructed so that the panels are gapped on the outside. These gaps must be filled: styrofoam, 
 perlite, rolled bubble wrap, anything that provides reasonable insulation. 
 
-More insulation is dramatically better here: use thick panels. The bottom panel has to bear the weight of almost 3000lbs of water, unevenly distributed, which may require reinforcement along the back. It may be necessary to use 3x3 shipping pallets with insulation packed into the gaps as the bottom layer: these are rated to support the necessary weight. The other panels bear only their own load. The exterior volume being closer to 9 feet in length, the 3 x 9 footprint is useful, and we waste little to no paneling if we're building HexaHots in lots of four, since we can now cut 4 1x8 strips for the front. 
+More insulation is dramatically better here: use thick panels. The bottom panel has to bear the weight of almost 3000 lbs of water, unevenly distributed, which may require reinforcement along the back. It may be necessary to use 3x3 shipping pallets with insulation packed into the gaps as the bottom layer: these are rated to support the necessary weight. The other panels bear only their own load. The exterior volume being closer to 9 feet in length, the 3 x 9 footprint is useful, and we waste little to no paneling if we're building HexaHots in lots of four, since we can now cut 4 1x8 strips for the front. 
 
 ## Heat exchange.
 
-Sealed to the plane facing towards maximum solar gain is a 4 x 8 sheet of clear material. This may be double-wall or otherwise insulating, but this is not critical. This plane (the insulation) must be painted a matte black, and there are advantages to using a relatively deep layer of paint or some few millimeters of plaster here. The reason is that significant radiation wwould reach the reflective layer and we want to capture it on the bounce. A stucco texture is best, for the same reason. A black primer layer of paint to texture the Mylar, followed by several coatings of flour and charcoal, with perhaps a little chalk, ought to do the trick, or just mix large amounts of charcoal into stucco. You've won when it looks the same dull, light-stealing black from any angle. 
+Sealed to the plane facing towards maximum solar gain is a 4 x 8 sheet of clear material. This may be double-wall or otherwise insulating, but this is not critical. This plane (the insulation) must be painted a matte black, and there are advantages to using a relatively deep layer of paint or some few millimeters of plaster here. The reason is that significant radiation would reach the reflective layer and we want to capture it on the bounce. A stucco texture is best, for the same reason. A black primer layer of paint to texture the Mylar, followed by several coatings of flour and charcoal, with perhaps a little chalk, ought to do the trick, or just mix large amounts of charcoal into stucco. You've won when it looks the same dull, light-stealing black from any angle. 
 
-This is built with a small air gap. The easiest way is to use 2 x 4s and tape or other sealant. For maximum gain in northerly climates, it may be worth adjusting the angle of the transparent pane to minimize reflection in winter. 
+This is built with a small air gap. The easiest way is to use 2x4s and tape or other sealant. For maximum gain in northerly climates, it may be worth adjusting the angle of the transparent pane to minimize reflection in winter. 
 
 On either side, we install small fans, the kind used in a computer power supply should suffice. The intake blows into a small box with a passive damper made of sheet plastic, while the exhaust reverses this arrangement: the fan is on the interior and the damper is on the surface of the pane. These boxes, constructed from the insulation, provide a barrier to prevent heat loss when the sun isn't shining. 
 
@@ -68,13 +68,13 @@ The output fan takes air from the bottom layer, and the top layer needs reasonab
 
 As always, this is the rub.
 
-Building a solar closet is art. The HexaHot follows fairly standard HexaYurt practices: insulated paneling and lots of tape. In this case we use a bit of wood, and as little metal as possible, mostly because the properties are all wrong for the application. 
+Building a solar closet is art. The HexaHot follows fairly standard Hexayurt practices: insulated paneling and lots of tape. In this case we use a bit of wood, and as little metal as possible, mostly because the properties are all wrong for the application. 
 
 The first step is to build the reactor. We start with a 4x8 insulated panel. The shinier side goes down, the printed side gets a coat of paint. We then apply any sort of coating that will stay on in hot, moist conditions, and provide the dull-black-at-all-angles trait of a good black body. Building it up to the point of thermal mass is counterproductive. 
 
-Some mixture of chalks, charcoal, and glue is likely to do the job. Charcoal and marine wood glue, with a bit of zinc oxide paint, is what we're going for, and the charcoal shouldn't be too finely divided. 
+Some mixture of chalks, charcoal, and glue is likely to do the job. Charcoal and marine wood glue, with a bit of zinc oxide paint, is what we're going for, and the charcoal shouldn't be too finely divided. Look into: making sure we captue as much IR as possible. Quartz?
 
-We cut small holes on both sides: one gets a fan and one gets a plastic damper sheet. We then build a 2x4 frame that covers the top and both sides. We lay this over, add the transparent panel, and then make a tape sandwich with really burly, large, expensive tape. The bottom is still open. 
+We cut small holes on both ends: one gets a fan and one gets a plastic damper sheet. We then build a 2x4 frame that covers the top and both sides. We lay this over, add the transparent panel, and then make a tape sandwich with really burly, large, expensive tape. The bottom is still open. 
 
 Assuming the yurt is up, we lay 3 pallets down and tape them to the bottom of the wall. They need to be insulation filled and should probably have a thin tarp over them for airtightness. This means being careful when populating the bottom layer!
 
@@ -82,7 +82,9 @@ One side is built up, the front strip attached, and the intake fan box built. Th
 
 The last wall has to be built and attached and the whole thing checked for leaks. It really should be able to handle a couple pounds of overpressure: I can't stress this enough. We then remove the wall and add the inner structure. It's cramped, but this can't be helped. 
 
-The layers probably have to go in incrementally. The buckets can be laid empty and should be, since leaks are bad and this lets us check. This part is art. At the end, the last wall goes in, and Bob is your proverbial uncle. 
+Building the removable wall is probably a matter of taking two pieces of insulation, folding thin yoga-style matting over the ends, and staple gunning it. Perhaps with some glue to keep the layers from sliding against each other. This is press-fit into the end and should provide a nice airtight seal. We hinge this with the bottom tarp, making a door that opens down but cannot be fully removed, to deal with the irregularity of the bottom pallet plane. 
+
+The water layers probably have to go in incrementally. The buckets can be laid empty and should be, since leaks are bad and this lets us check. This part is art. At the end, the last wall goes in, and Bob is your proverbial uncle. 
 
 
 
