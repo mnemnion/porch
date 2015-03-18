@@ -378,6 +378,12 @@ especially when thread-safe references are going to be in the picture. Add this 
 the cache picture and we're well outside my comfort zone.
 
 I do know that the zipper has much wisdom to provide.
+
+The basic strategy is to add one more pointer to semantic nodes. Any change that affects
+a node is recorded as a back reference, and the node affected gets a pointer stuffed
+onto a stack. That's your global undo. Regional undo follows the back reference
+and must remove that change from the stack.
+
 ** Integration
 
 A string library isn't particularly useful on its own. Strings are the
