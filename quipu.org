@@ -109,15 +109,12 @@ The initial parse creates semantic nodes, which are n-ary and link
 together. Semantic nodes that aren't unary or binary contain an
 additional two slots.
 
-The balance pass, which could be incorporated, though that's
-just moving constant time around, assigns a left-right chain through
-each of the subnodes. The pointers for the first two subnodes go
-into left and right respectively and are distributed among the subnodes
-accordingly.
+The  balance  pass  assigns  a  left-right chain  through  each  of  the
+subnodes. The pointers for the first two subnodes go into left and right
+respectively and are distributed among the subnodes accordingly.
 
-I believe the pivots may be separately optimized by redistribution of the subnode
-DAG. There is some heuristic point where we can save both memory and time by
-replacing a run of subnodes with a smaller, more evenly balanced tree.
+Since we know the bias of the nodes, which are aware of their span,
+we can correct for it with our pivot placement.
 
 We now have a quipu, with nodes, some of which are fat, and pivots, which
 give our tree a balanced shape.
@@ -131,7 +128,7 @@ designed to enforce this.
 Since our pivots are anonymous, we can break any long flat
 data up into ordinary ropes.
 
-*** Picture
+*** COMMENT Picture
 
 Here's a lisp tree:
 
@@ -206,12 +203,12 @@ Now let's painstakingly add some pivots.
 #+begin_src dot :file images/node-pivot-leaf.png  :exports results :cache yes
    digraph G {
   list [label = "list", style = filled, fillcolor = cyan]
-  pivot_1 [style = filled, fillcolor = green]
+  pivot_1 [label = "pivot", style = filled, fillcolor = green]
   node_1 [label = "defun", style = filled, fillcolor = gray]
   foo_node [label = "foo", style = filled, fillcolor = gray]
-  pivot_2 [style = filled, fillcolor = green]
+  pivot_2 [label = "pivot", style = filled, fillcolor = green]
   list_1 [label = "list 1", style = filled, fillcolor = cyan]
-  pivot_3 [style = filled, fillcolor = green]
+  pivot_3 [label = "pivot", style = filled, fillcolor = green]
   node_4 [label = "\"a foo function\"", style = filled, fillcolor = gray]
   list_2 [label = "list 2", style = filled, fillcolor = cyan]
   node_5 [label = "if", style = filled, fillcolor = gray]
@@ -221,26 +218,26 @@ Now let's painstakingly add some pivots.
   node_3 [label = "meeny", style = filled, fillcolor = gray]
   list_5 [label = "list 5", style = filled, fillcolor = cyan]
   list_6 [label = "list 6", style = filled, fillcolor = cyan]
-   pivot_5 [style = filled, fillcolor = green]
+   pivot_5 [label = "pivot", style = filled, fillcolor = green]
   node_6 [label = "eq", style = filled, fillcolor = gray]
 
   node_7 [label = "eeny", style = filled, fillcolor = gray]
   node_8 [label = "meeny", style = filled, fillcolor = gray]
   node_9 [label = "miney", style = filled, fillcolor = gray]
   node_10 [label = "mo", style = filled, fillcolor = gray]
-  pivot_6 [style = filled, fillcolor = green]
-  node_11 [label = "fo", style = filled, fillcolor = gray]
-  node_12 [label = "fum", style = filled, fillcolor = gray]
+  pivot_6 [label = "pivot", style = filled, fillcolor = green]
+  node_11 [label = "fum", style = filled, fillcolor = gray]
+  node_12 [label = "fo", style = filled, fillcolor = gray]
   node_13 [label = "fi", style = filled, fillcolor = gray]
   node_14 [label = "fie", style = filled, fillcolor = gray]
-  pivot_7 [label = "pivot_8", style = filled, fillcolor = green]
-  pivot_8 [label = "pivot_7"style = filled, fillcolor = green]
+  pivot_7 [label = "pivot", style = filled, fillcolor = green]
+  pivot_8 [label = "pivot", style = filled, fillcolor = green]
 
     list -> pivot_1 [color = red]
     list -> node_1
     list -> foo_node
-       pivot_1 -> node_1
-       pivot_1 -> foo_node
+       pivot_1 -> node_1 [color = red]
+       pivot_1 -> foo_node [color = red]
     list -> pivot_2 [color = red]
      pivot_2 -> list_1 [color = red]
      list -> list_1
@@ -283,10 +280,13 @@ Now let's painstakingly add some pivots.
   }
 #+end_src
 
-#+RESULTS[c11e089de355c4147a9cf7dd366c10b5fb2bd07a]:
+#+RESULTS[e3757a81acd6d8009b3ec5aac1911875fb11a583]:
 [[file:images/node-pivot-leaf.png]]
 
 And that's a quipu. Parens and whitespace elided, they don't really help.
+
+There are places to make this more balanced, like pivoting between list 4
+and 5 instead of 5 and 6.
 
 **** DONE Get dot working with Org
      CLOSED: [2015-03-17 Tue 22:19]
