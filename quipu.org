@@ -427,10 +427,6 @@ use a lot of pivots.
 
 The [[http://luajit.org/ext_ffi.html][LuaJIT FFI]] makes this simple.
 
-Emacs fails sometimes. That's ancient design and a lot of impedance
-between assumed and actual environment. Judging by when Sublime and
-Emacs pause for me, multiple regex passes are the main slowdown.
-
 Parse repair. That's the actual hard part.
 
 On the other hand, having a pure C library is nice, because then
