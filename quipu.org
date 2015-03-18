@@ -221,20 +221,20 @@ Now let's painstakingly add some pivots.
   node_3 [label = "meeny", style = filled, fillcolor = gray]
   list_5 [label = "list 5", style = filled, fillcolor = cyan]
   list_6 [label = "list 6", style = filled, fillcolor = cyan]
+   pivot_5 [style = filled, fillcolor = green]
   node_6 [label = "eq", style = filled, fillcolor = gray]
 
   node_7 [label = "eeny", style = filled, fillcolor = gray]
   node_8 [label = "meeny", style = filled, fillcolor = gray]
-  pivot_5 [style = filled, fillcolor = green]
   node_9 [label = "miney", style = filled, fillcolor = gray]
   node_10 [label = "mo", style = filled, fillcolor = gray]
   pivot_6 [style = filled, fillcolor = green]
-  pivot_7 [style = filled, fillcolor = green]
-  pivot_8 [style = filled, fillcolor = green]
-  node_11 [label = "fi", style = filled, fillcolor = gray]
-  node_12 [label = "fie", style = filled, fillcolor = gray]
-  node_13 [label = "fo", style = filled, fillcolor = gray]
-  node_14 [label = "fum", style = filled, fillcolor = gray]
+  node_11 [label = "fo", style = filled, fillcolor = gray]
+  node_12 [label = "fum", style = filled, fillcolor = gray]
+  node_13 [label = "fi", style = filled, fillcolor = gray]
+  node_14 [label = "fie", style = filled, fillcolor = gray]
+  pivot_7 [label = "pivot_8", style = filled, fillcolor = green]
+  pivot_8 [label = "pivot_7"style = filled, fillcolor = green]
 
     list -> pivot_1 [color = red]
     list -> node_1
@@ -269,21 +269,24 @@ Now let's painstakingly add some pivots.
      list_3 -> list_6
      list_6 -> node_11
      list_6 -> node_12
-     list_6 -> node_13
-     list_6 -> node_14
      list_6 -> pivot_7      [color = red]
      pivot_7 -> node_11     [color = red]
      pivot_7 -> node_12     [color = red]
      list_6 -> pivot_8      [color = red]
+     list_6 -> node_13
+     list_6 -> node_14
+
+
+
      pivot_8 -> node_13     [color = red]
      pivot_8 -> node_14     [color = red]
   }
 #+end_src
 
-#+RESULTS[cc4e31b449c6dde6efc4597cd861328e04c900ef]:
+#+RESULTS[c11e089de355c4147a9cf7dd366c10b5fb2bd07a]:
 [[file:images/node-pivot-leaf.png]]
 
-And that's a quipu.
+And that's a quipu. Parens and whitespace elided, they don't really help.
 
 **** DONE Get dot working with Org
      CLOSED: [2015-03-17 Tue 22:19]
@@ -291,6 +294,12 @@ And that's a quipu.
 ** Algorithmic Properties.
 
 I believe the quipu inherits the properties of a rope for ordinary operations.
+To be fair, it can't be tuned to maintain a fully optimal structure, by choosing
+a string length that complements the cache, balancing the tree with only speed
+in mind, and so on.
+
+But again, we use a quipu when we were going to have an AST anyway. This
+gap-buffer plus a grip of regex nonsense has to stop.
 
 Note that nodes are also pivots, so in a quipu 'node' refers specifically to
 the n-ary structure with attached semantics. pivot refers to both.
