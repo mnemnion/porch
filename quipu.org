@@ -384,6 +384,11 @@ a node is recorded as a back reference, and the node affected gets a pointer stu
 onto a stack. That's your global undo. Regional undo follows the back reference
 and must remove that change from the stack.
 
+I'm pretty sure the old state is cloned and put in the past, so that a give node
+retains the same literal identity. At least for our purposes. This makes it slow,
+but possible, to access old trees. We have revision control for that purpose,
+and are more interested in undos than working with the full state of old data.
+
 ** Integration
 
 A string library isn't particularly useful on its own. Strings are the
