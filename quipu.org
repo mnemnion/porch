@@ -128,7 +128,7 @@ designed to enforce this.
 Since our pivots are anonymous, we can break any long flat
 data up into ordinary ropes.
 
-*** COMMENT Picture
+*** Picture
 
 Here's a lisp tree:
 
@@ -339,7 +339,6 @@ We can probably make  it smaller than a rope indexed by  an AST. We also
 avoid the inevitable  complexity of applying a  tree-like structure over
 another tree-like structure, which may well be discontiguous in memory.
 
-
 *** Cache Awareness
 
 Though by no means the first thing to add, implementation should proceed with
@@ -393,3 +392,54 @@ provide an equivalent function.
 This is simplistic, there are many questions to answer, but we're past
 the point where continuing to specify is practical. Bottom line, it's a
 DAG, and DAGs have been allocated and freed before.
+** Implementation
+
+I'd rather write and profile the data structure in LuaJIT,
+then see if there's anything left to optimize. That gives us strings
+that are immutable already, a garbage collector, and a tracing
+JIT, all of which are useful.
+
+C can't do one of these without refcounts, can it? It seems like
+one of those projects where writing it in C entails writing a
+crappy garbage collector.
+
+It's a silly question. Cedar at Mesa had a perfectly usable
+garbage-collected rope text editor in the early 80s on a
+computer comparable to my TI-89. Unlike a parser, which literally
+cannot be fast enough, let alone too fast (if a parser could be fast
+enough, it could parse encrypted data, and it cannot), an editor
+just has to be faster than fat-fingered wetbrains.
+
+We do want to add a simple double-pointer pivot type from C,
+and do pivot assignment across the FFI. It's much smaller and we
+use a lot of pivots.
+
+The [[http://luajit.org/ext_ffi.html][LuaJIT FFI]] makes this simple.
+
+Emacs fails sometimes. That's ancient design and a lot of impedance
+between assumed and actual environment. Judging by when Sublime and
+Emacs pause for me, multiple regex passes are the main slowdown.
+
+Parse repair. That's the actual hard part.
+
+On the other hand, having a pure C library is nice, because then
+everyone can use it. Writing anything even slightly complex for the
+first time in pure C is a habit I don't have.
+
+There's also no reason the strings have to be strings. The edges
+could instead define an entry point into a [[http://cr.yp.to/critbit.html][crit bit]] trie. This
+makes the strings themselves immutable, letting us concentrate
+on the data structure.
+
+It's funny to contemplate but given a preloaded crit bit dictionary,
+adding text will add two additional pointer's worth per unique word or
+phrase. Pointers are fat enough that they're most of the weight,
+clocking in at sixteen asciis for two.
+
+At that point, what's even left? The strings, nodes, and pivot chains
+all inhabit separate spaces encouraging the performances they typically
+engage in, and we've spent the minimal amount of memory to obtain
+those separate guarantees.
+
+This is approximated by using Lua's immutable strings to hold the leaves.
+They're interned into a single data structure that's crit-bit-like.
