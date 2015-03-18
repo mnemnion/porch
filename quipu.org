@@ -102,9 +102,8 @@ consistent ways, we can attempt to pivot in the balancing direction each time.
 
 *** Digging in
 
-I really need to get the hang of using dot to make diagrams.
 
-I think the basic strategy has two types of node.
+The basic strategy has two types of node.
 
 The initial parse creates semantic nodes, which are n-ary and link
 together. Semantic nodes that aren't unary or binary contain an
@@ -148,20 +147,20 @@ Let's render the AST:
 
 #+BEGIN_SRC dot :file images/node-leaf.png  :exports results :cache yes
    digraph G {
-  list [label = "list", style = filled, fillcolor = blue]
+  list [label = "list", style = filled, fillcolor = cyan]
 
   node_1 [label = "defun", style = filled, fillcolor = gray]
   foo_node [label = "foo", style = filled, fillcolor = gray]
-  list_1 [label = "list 1", style = filled, fillcolor = blue]
+  list_1 [label = "list 1", style = filled, fillcolor = cyan]
   node_4 [label = "\"a foo function\"", style = filled, fillcolor = gray]
-  list_2 [label = "list 2", style = filled, fillcolor = blue]
+  list_2 [label = "list 2", style = filled, fillcolor = cyan]
   node_5 [label = "if", style = filled, fillcolor = gray]
-  list_3 [label = "list 3", style = filled, fillcolor = blue]
-  list_4 [label = "list 4", style = filled, fillcolor = blue]
+  list_3 [label = "list 3", style = filled, fillcolor = cyan]
+  list_4 [label = "list 4", style = filled, fillcolor = cyan]
   node_2 [label = "eeny", style = filled, fillcolor = gray]
   node_3 [label = "meeny", style = filled, fillcolor = gray]
-  list_5 [label = "list 5", style = filled, fillcolor = blue]
-  list_6 [label = "list 5", style = filled, fillcolor = blue]
+  list_5 [label = "list 5", style = filled, fillcolor = cyan]
+  list_6 [label = "list 5", style = filled, fillcolor = cyan]
   node_6 [label = "eq", style = filled, fillcolor = gray]
   node_7 [label = "eeny", style = filled, fillcolor = gray]
   node_8 [label = "meeny", style = filled, fillcolor = gray]
@@ -196,7 +195,7 @@ Let's render the AST:
 
 #+END_SRC
 
-#+RESULTS[0595133e456de528ba78e2058846e6f2c9b7077e]:
+#+RESULTS[a717a90928e0c199fb262837a042001b8f1059c4]:
 [[file:images/node-leaf.png]]
 
 I made it fairly balanced.
@@ -205,85 +204,86 @@ Now let's painstakingly add some pivots.
 
 
 #+begin_src dot :file images/node-pivot-leaf.png  :exports results :cache yes
- digraph G {
-list [label = "list", style = filled, fillcolor = blue]
-pivot_1 [style = filled, fillcolor = green]
-node_1 [label = "defun", style = filled, fillcolor = gray]
-foo_node [label = "foo", style = filled, fillcolor = gray]
-pivot_2 [style = filled, fillcolor = green]
-list_1 [label = "list 1", style = filled, fillcolor = blue]
-pivot_3 [style = filled, fillcolor = green]
-node_4 [label = "\"a foo function\"", style = filled, fillcolor = gray]
-list_2 [label = "list 2", style = filled, fillcolor = blue]
-node_5 [label = "if", style = filled, fillcolor = gray]
-list_3 [label = "list 3", style = filled, fillcolor = blue]
-list_4 [label = "list 4", style = filled, fillcolor = blue]
-node_2 [label = "eeny", style = filled, fillcolor = gray]
-node_3 [label = "meeny", style = filled, fillcolor = gray]
-list_5 [label = "list 5", style = filled, fillcolor = blue]
-list_6 [label = "list 6", style = filled, fillcolor = blue]
-node_6 [label = "eq", style = filled, fillcolor = gray]
+   digraph G {
+  list [label = "list", style = filled, fillcolor = cyan]
+  pivot_1 [style = filled, fillcolor = green]
+  node_1 [label = "defun", style = filled, fillcolor = gray]
+  foo_node [label = "foo", style = filled, fillcolor = gray]
+  pivot_2 [style = filled, fillcolor = green]
+  list_1 [label = "list 1", style = filled, fillcolor = cyan]
+  pivot_3 [style = filled, fillcolor = green]
+  node_4 [label = "\"a foo function\"", style = filled, fillcolor = gray]
+  list_2 [label = "list 2", style = filled, fillcolor = cyan]
+  node_5 [label = "if", style = filled, fillcolor = gray]
+  list_3 [label = "list 3", style = filled, fillcolor = cyan]
+  list_4 [label = "list 4", style = filled, fillcolor = cyan]
+  node_2 [label = "eeny", style = filled, fillcolor = gray]
+  node_3 [label = "meeny", style = filled, fillcolor = gray]
+  list_5 [label = "list 5", style = filled, fillcolor = cyan]
+  list_6 [label = "list 6", style = filled, fillcolor = cyan]
+  node_6 [label = "eq", style = filled, fillcolor = gray]
 
-node_7 [label = "eeny", style = filled, fillcolor = gray]
-node_8 [label = "meeny", style = filled, fillcolor = gray]
-pivot_5 [style = filled, fillcolor = green]
-node_9 [label = "miney", style = filled, fillcolor = gray]
-node_10 [label = "mo", style = filled, fillcolor = gray]
-pivot_6 [style = filled, fillcolor = green]
-pivot_7 [style = filled, fillcolor = green]
-pivot_8 [style = filled, fillcolor = green]
-node_11 [label = "fi", style = filled, fillcolor = gray]
-node_12 [label = "fie", style = filled, fillcolor = gray]
-node_13 [label = "fo", style = filled, fillcolor = gray]
-node_14 [label = "fum", style = filled, fillcolor = gray]
+  node_7 [label = "eeny", style = filled, fillcolor = gray]
+  node_8 [label = "meeny", style = filled, fillcolor = gray]
+  pivot_5 [style = filled, fillcolor = green]
+  node_9 [label = "miney", style = filled, fillcolor = gray]
+  node_10 [label = "mo", style = filled, fillcolor = gray]
+  pivot_6 [style = filled, fillcolor = green]
+  pivot_7 [style = filled, fillcolor = green]
+  pivot_8 [style = filled, fillcolor = green]
+  node_11 [label = "fi", style = filled, fillcolor = gray]
+  node_12 [label = "fie", style = filled, fillcolor = gray]
+  node_13 [label = "fo", style = filled, fillcolor = gray]
+  node_14 [label = "fum", style = filled, fillcolor = gray]
 
-  list -> pivot_1 [color = red]
-  list -> node_1
-  list -> foo_node
-     pivot_1 -> node_1
-     pivot_1 -> foo_node
-  list -> pivot_2 [color = red]
-   pivot_2 -> list_1 [color = red]
-   list -> list_1
-   list_1 -> node_2  [color = red]
-   list_1 -> node_3   [color = red]
-   pivot_2 -> pivot_3 [color = red]
-   pivot_3 -> node_4  [color = red]
-   pivot_3 -> list_2  [color = red]
-   list -> node_4
-   list -> list_2
-   list_2 -> node_5    [color = red]
-   list_2 -> list_3   [color = red]
-   list_3 -> list_4   [color = red]
-   list_4 -> node_6   [color = red]
-   list_4 -> node_7
-   list_4 -> node_8
-   list_4 -> pivot_5   [color = red]
-   pivot_5 -> node_7   [color = red]
-   pivot_5 -> node_8   [color = red]
-   list_3 -> list_5
-   list_3 -> pivot_6    [color = red]
-   pivot_6 -> list_5
-   pivot_6 -> list_6
-   list_5 -> node_9
-   list_5 -> node_10
-   list_3 -> list_6
-   list_6 -> node_11
-   list_6 -> node_12
-   list_6 -> node_13
-   list_6 -> node_14
-   list_6 -> pivot_7
-   pivot_7 -> node_11
-   pivot_7 -> node_12
-   list_6 -> pivot_8
-   pivot_8 -> node_13
-   pivot_8 -> node_14
-}
+    list -> pivot_1 [color = red]
+    list -> node_1
+    list -> foo_node
+       pivot_1 -> node_1
+       pivot_1 -> foo_node
+    list -> pivot_2 [color = red]
+     pivot_2 -> list_1 [color = red]
+     list -> list_1
+     list_1 -> node_2  [color = red]
+     list_1 -> node_3   [color = red]
+     pivot_2 -> pivot_3 [color = red]
+     pivot_3 -> node_4  [color = red]
+     pivot_3 -> list_2  [color = red]
+     list -> node_4
+     list -> list_2
+     list_2 -> node_5    [color = red]
+     list_2 -> list_3   [color = red]
+     list_3 -> list_4   [color = red]
+     list_4 -> node_6   [color = red]
+     list_4 -> node_7
+     list_4 -> node_8
+     list_4 -> pivot_5   [color = red]
+     pivot_5 -> node_7   [color = red]
+     pivot_5 -> node_8   [color = red]
+     list_3 -> list_5
+     list_3 -> pivot_6    [color = red]
+     pivot_6 -> list_5    [color = red]
+     pivot_6 -> list_6    [color = red]
+     list_5 -> node_9    [color = red]
+     list_5 -> node_10   [color = red]
+     list_3 -> list_6
+     list_6 -> node_11
+     list_6 -> node_12
+     list_6 -> node_13
+     list_6 -> node_14
+     list_6 -> pivot_7      [color = red]
+     pivot_7 -> node_11     [color = red]
+     pivot_7 -> node_12     [color = red]
+     list_6 -> pivot_8      [color = red]
+     pivot_8 -> node_13     [color = red]
+     pivot_8 -> node_14     [color = red]
+  }
 #+end_src
 
-#+RESULTS[cbc8669e3831e744b4ebc5b871b1f2b5e8b38e51]:
+#+RESULTS[cc4e31b449c6dde6efc4597cd861328e04c900ef]:
 [[file:images/node-pivot-leaf.png]]
 
+And that's a quipu.
 
 **** DONE Get dot working with Org
      CLOSED: [2015-03-17 Tue 22:19]
