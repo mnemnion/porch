@@ -1,0 +1,232 @@
+* The Quipu Data Structure
+
+The [[http://en.wikipedia.org/wiki/Rope_%28data_structure%2][rope]] data structure has an interesting quality: it could be implemented
+such that the structure of the rope is the same as the structure of the
+abstract syntax tree.
+
+The rope itself is efficient and works well for text editing. Combining ropes
+with semantics we call a quipu.
+
+** Prerequisites
+
+A good parser. [[https://github.com/UpstandingHackers/hammer][Hammer]] is the leading candidate. A binary focus may be turned
+and tuned to utf-8, going the other direction is painful. The parser will
+be capable of outputting several data structures, the quipu form among them,
+offset tables being the other major flavor.
+
+The parser must have a good [[file:parse-repair.org][parse repair strategy]]. Keeping things tree-like
+is critical to performance. Although we can and will fall back on the basic
+rope for flat sections, this isn't acceptable for the larger application,
+which is a ground-up, semantically-aware library of editing functions.
+
+** Structure
+
+A rope node contains the length and pointers to the left and right.
+
+A quipu adds an enriched node type, that has semantics and is n-ary.
+
+We balance the quipu by inserting additional, ordinary-rope-like
+nodes, which we call pivots.
+
+We end up  with a binary tree,  used for editing, braided  with an n-ary
+tree, used  for semantic purposes. The  DAG has the properties  of being
+well-formed (single root node) and convergent (both the n-ary and binary
+DAGs contain the same leaf nodes, reached by different paths).
+
+** Use
+
+Superficially, it works similarly to a rope. But to stay semantically in sync,
+it has to cooperate with the parser, and this can be a disaster if not carefully
+implemented.
+
+Parsing is an all-or-nothing proposition, normally: a string is correct right up
+until it isn't, and then it's all wrong. Even regex scans that approximate a parse,
+like syntax highlighting, gets tripped up by this: delete the " at the end of a
+string in a code editor to see what I mean. I suspect you already have.
+
+Fortunately for all of us, [[http://www.antlr.org/][ANTLR]] has an incredible parse repair algorithm. I've
+mentioned it a few times in notes and really need to crack open the PDF and
+transcribe it, because it really impressed me and it can be adapted to PEGs.
+The reference is section 9.3 of the manual.
+
+As I said, you need a really good parser. But with that parser, and a quipu,
+one can write a really tight editing library on top.
+
+That is a topic for another page.
+
+** Problems
+
+Ropes like to be binary and balanced. Parse trees are either n-ary and fairly
+well balanced, or binary and strongly tail-loaded.
+
+I suspect one could get acceptable balance by forcing a left-right structure onto
+n-ary nodes. These pivot nodes would be anonymous so ((foo)(bar)(baz)), which
+we'd often parse
+
+- cons
+  - head :: "foo""
+  - tail :: cons
+    - head :: "bar"
+    - tail :: cons
+      - head :: "baz"
+
+We could instead parse
+
+- list
+ - head :: pivot
+   - head :: pivot
+      - head :: "foo"
+      - tail :: ""bar""
+   - tail :: pivot
+      - head :: "baz"
+
+Leaving out a level of detail to make the picture more clear.
+
+We can see with this small example that it's not growing left. A typical long parse,
+intuitively, will end up balanced with this approach. Balanced enough.
+
+Also worth remembering: We're doing semantic editing with this library. It will,
+almost by definition, have poorer algorithmic characteristics than a structure-unaware
+string of some sort, such as a skip-list rope.
+
+However, we were going to do semantic analysis on that string anyway. Normally this is a
+regular expression driven parse over at least the region under display, with periodic
+full reparses by the language runtime. We can't normally eliminate the latter, at least
+not at first, but the point of a quipu is to perform that semantic analysis and then preserve
+it through various transformations, nearly all of which put the parse tree in a temporary
+state of error.
+
+We can also rebalance off the pivots, by flipping them on and off in various ways. The pivots
+don't affect the semantics of the tree, just the shape, they don't have to be added in
+consistent ways, we can attempt to pivot in the balancing direction each time.
+
+*** Digging in
+
+I really need to get the hang of using dot to make diagrams.
+
+I think the basic strategy has two types of node.
+
+The initial parse creates semantic nodes, which are n-ary and link
+together. Semantic nodes that aren't unary or binary contain an
+additional two slots.
+
+The balance pass, which could be incorporated, though that's
+just moving constant time around, assigns a left-right chain through
+each of the subnodes. The pointers for the first two subnodes go
+into left and right respectively and are distributed among the subnodes
+accordingly.
+
+I believe the pivots may be separately optimized by redistribution of the subnode
+DAG. There is some heuristic point where we can save both memory and time by
+replacing a run of subnodes with a smaller, more evenly balanced tree.
+
+We now have a quipu, with nodes, some of which are fat, and pivots, which
+give our tree a balanced shape.
+
+We can save these to store by translating the pointers into offsets and compressing the
+node structure into a header. This can be laid out in a cache-friendly way,
+
+The tendency of structured data is to stay structured, and our parser will be
+designed to enforce this.
+
+Since our pivots are anonymous, we can break any long flat
+data up into ordinary ropes.
+
+**** TODO Get dot working with Org
+
+** Algorithmic Properties.
+
+I believe the quipu inherits the properties of a rope for ordinary operations.
+
+Note that nodes are also pivots, so in a quipu 'node' refers specifically to
+the n-ary structure with attached semantics. pivot refers to both.
+
+Let's call *n*  the number of nodes,  *p* the number of  pivots, and *c*
+the number of characters in the string. n < p < c, the first a subcategory
+of the second.
+
+The rope is known to hang out around gap buffers and skip lists for baseline
+performance, with qualities that suit it to immutable edits.
+
+The quipu inherits this, with other interesting properties.
+
+=mark-region= is O(?), where ? is the number of nodes between master and the
+region to be highlighted. This is true of any similar functions, such as
+code folding or most colorizing. What's the average here, n log n?
+
+Operations such as seach-and-replace  or autocomplete become faster when
+restricted to semantic categories. We  can completely skip any subregion
+that won't have our information.
+
+Consider a literate document, split into presentation and code. From
+the perspective of our environment, they may as well be completely
+separate: each boundary is visited once and declined immediately.
+
+A common situation is to have a string which is interpolated with other data
+along semantic boundaries. The *ML family of markup languages are useful
+to work with in this fashion. The object pointer in the node structures
+allows us to abstract away this situation, and render it flexibly, with
+good performance.
+
+The goal is to combine the time characteristics of a rope and an AST
+for their characteristic problem domains, with a modest, O(p-n) increase in memory
+requirements over a perfectly flat string indexed by an AST.
+
+We can probably make  it smaller than a rope indexed by  an AST. We also
+avoid the inevitable  complexity of applying a  tree-like structure over
+another tree-like structure, which may well be discontiguous in memory.
+
+
+*** Cache Awareness
+
+Though by no means the first thing to add, implementation should proceed with
+an eye towards cache-friendly layout.
+
+I could use a lot of help. I know the basics but have in fact never
+written code with hard performance requirements like we're talking about here.
+
+I learned the craft on a 286 with 640k OK and have miserly instincts, so
+I do care.
+
+I know we want chunks to be large enough that they flow through a pipeline,
+but small enough that if we hand them off to garbage collectors they won't get
+tagged as enormous and impossible to move.
+
+The basic strategy is to write into blocks allocated from some pool, packing the
+pivots into the front and the strings into the back. The strings should have
+telomeres on both sides, zeroes we can consume with additions, and should be in
+order, so we can strip the strings by pulling off the footers and filtering nulls.
+
+I haven't the faintest idea how to move the contents around as the quipu are
+juggled. BTW the zeroes in the telomeres are junk, not semantics, the quipu
+preserves the length of data. It's safe to stuff zeroes in there, as long
+as you're willing to strip the data back out using the quipu rather than
+footer filtering.
+
+I want this to be fast enough that it would be worth writing a filesystem
+over it. That's not what I want it for, but it would make the application
+in question better.
+
+** Immutability
+
+It's worthwhile having a version of this that's designed for immutable revision.
+
+My head starts to swell when I have to think about immutable data structures,
+especially when thread-safe references are going to be in the picture. Add this to
+the cache picture and we're well outside my comfort zone.
+
+I do know that the zipper has much wisdom to provide.
+** Integration
+
+A string library isn't particularly useful on its own. Strings are the
+classic case for garbage collection, and we want the quipu to be
+usable from dynamic languages.
+
+Lua lets us use [[http://stackoverflow.com/questions/3578401/lua-garbage-collection-userdata][lua_newuserdata()]] in place of malloc(), allowing the GC
+to handle reference counting directly. We'll want to make malloc() and
+free() into macros, since I'm sure most GC languages with a good FFI
+provide an equivalent function.
+
+This is simplistic, there are many questions to answer, but we're past
+the point where continuing to specify is practical. Bottom line, it's a
+DAG, and DAGs have been allocated and freed before.
