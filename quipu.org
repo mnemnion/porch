@@ -128,7 +128,7 @@ designed to enforce this.
 Since our pivots are anonymous, we can break any long flat
 data up into ordinary ropes.
 
-*** COMMENT Picture
+*** Picture
 
 Here's a lisp tree:
 
