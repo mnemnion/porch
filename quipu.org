@@ -1,3 +1,4 @@
+#+options: H:4
 * The Quipu Data Structure
 
 The [[http://en.wikipedia.org/wiki/Rope_%28data_structure%2][rope]] data structure has an interesting quality: it could be implemented
@@ -54,81 +55,155 @@ one can write a really tight editing library on top.
 
 That is a topic for another page.
 
-** Problems
+** Data Structures
 
-Ropes like to be binary and balanced. Parse trees are either n-ary and fairly
-well balanced, or binary and strongly tail-loaded.
+The pivots need three slots: left, right, and length. All nodes have to be a pivot,
+in a sense, but the paths are distinct, so we can rebalance the tree. Though they are
+notably present in zigzag form within the pivots, indeed that is the point.
 
-I suspect one could get acceptable balance by forcing a left-right structure onto
-n-ary nodes. These pivot nodes would be anonymous so ((foo)(bar)(baz)), which
-we'd often parse
+So rather than using the zeroes for tagging, we'll use them to indicate the length. 64
+bit alignment, which will apply to all our pointers, leaves us six free bits. We'll just flip one
+if the pointer contains the length.
 
-- cons
-  - head :: "foo""
-  - tail :: cons
-    - head :: "bar"
-    - tail :: cons
-      - head :: "baz"
+In fact, let's optimize a bit further. There are a grip of tokens that are just "  {" and maybe
+a newline. We need four bits to store an ASCII character. Meaning we can use the second of our bits
+to encode a token up to seven characters within the node itself. This is quite friendly to our cache
+in comparison.
 
-We could instead parse
+Oh wait, if it doesn't have a length, it is a length, so let's go further. We can store up to
+23 characters inside the same discriminated union.
 
-- list
- - head :: pivot
-   - head :: pivot
-      - head :: "foo"
-      - tail :: ""bar""
-   - tail :: pivot
-      - head :: "baz"
+That's a nice number. The previous sentence fits in that number. Variables tend to fit in that number.
+Dictionary words fit in that number.
 
-Leaving out a level of detail to make the picture more clear.
+Hmm. As I think about it, the Nodes need a length too.
+Keeping it on the semantic side will absolutely kill us.
 
-We can see with this small example that it's not growing left. A typical long parse,
-intuitively, will end up balanced with this approach. Balanced enough.
+This being C, I could proceed by leaving the Node out of the
+discriminated union, and casting Node pointers to the union
+type for function calls. We place the semantic pointer out
+of reach.
 
-Also worth remembering: We're doing semantic editing with this library. It will,
-almost by definition, have poorer algorithmic characteristics than a structure-unaware
-string of some sort, such as a skip-list rope.
+But this reminds me of Knuth's full quote:
 
-However, we were going to do semantic analysis on that string anyway. Normally this is a
-regular expression driven parse over at least the region under display, with periodic
-full reparses by the language runtime. We can't normally eliminate the latter, at least
-not at first, but the point of a quipu is to perform that semantic analysis and then preserve
-it through various transformations, nearly all of which put the parse tree in a temporary
-state of error.
+#+begin_quote
+"Programmers waste enormous amounts of  time thinking about, or worrying
+about,  the speed  of noncritical  parts  of their  programs, and  these
+attempts  at efficiency  actually  have a  strong  negative impact  when
+debugging and maintenance  are considered. We should  forget about small
+efficiencies, say about  97% of the time: premature  optimization is the
+root of all  evil. Yet we should  not pass up our  opportunities in that
+critical 3%."
+#+end_quote
 
-We can also rebalance off the pivots, by flipping them on and off in various ways. The pivots
-don't affect the semantics of the tree, just the shape, they don't have to be added in
-consistent ways, we can attempt to pivot in the balancing direction each time.
+General data structures are well within that 3% margin. Memory is not
+at a premium, cache misses are costly and will remain so.
 
-*** Digging in
+**** Structure redux
+
+We are writing a fast editor for structured text. "Fast" means it can
+reasonably handle a few tens of thousands of lines of text structured
+into memory at once. It can 'open' an arbitrarily large file, and
+has separate threads (entire Lua workers actually) for user interaction
+and any command that needs to be asynced, which is most.
+
+Let's just say that a Quipu cell is four words long. If it's a Pivot,
+it's left, right, length, reference pointer (not null, for several reasons).
+If it's a Node, left, right, length, and semantic pointer.
+
+This gives us another important property: we can convert a pivot into
+a node without copying. With careful layout in initial parsing,
+ultimately heuristic, we can leave space to rearrange quipu in a
+cache and allocation efficient fashion, while preserving the tree
+structure.
+
+The tag block is stored in the least position of the tail pointer. We are
+allowed eight different states, for 32 bit compatibility of the library.
+
+We have:
+
+-   0 :: The cell is a Node (semantic)
+-   1 ::  The cell is a Pivot
+-   2 ::  The cell is a Knot
+-   3 ::  The cell is a Strand
 
 
-The basic strategy has two types of node.
+#+begin_src plantuml :file quipu-data-structures.png :export none
 
-The initial parse creates semantic nodes, which are n-ary and link
-together. Semantic nodes that aren't unary or binary contain an
-additional two slots.
+@startuml
+object firstObject
+object "My Second Object" as o2
+@enduml
 
-The  balance  pass  assigns  a  left-right chain  through  each  of  the
-subnodes. The pointers for the first two subnodes go into left and right
-respectively and are distributed among the subnodes accordingly.
+#+end_src
 
-Since we know the bias of the nodes, which are aware of their span,
-we can correct for it with our pivot placement.
+=Strand= being a cell with a blank(ish?) left, a right that points to
+a sequence longer than 31 byes, and the length of that sequence.
 
-We now have a quipu, with nodes, some of which are fat, and pivots, which
-give our tree a balanced shape.
+Clearly we can't use a null pointer for the tail pointer, for a Pivot.
+We could use an almost-null pointer, but I'd rather define a semantics
+for the pointer-after-masking, if there's one which is plausible. If
+we accidentally try to jump to a tagged pointer undefined things will
+happen as you can't load a frame from unaligned memory. I assume the
+kernel will boot your crazy process right out of existence but have
+yet to test this.
 
-We can save these to store by translating the pointers into offsets and compressing the
-node structure into a header. This can be laid out in a cache-friendly way,
+Candidates would be some kind of mutation chain. write-on-copy
+semantics make more sense than copy-on-write, and that implies
+using a separate data structure to store revision.
 
-The tendency of structured data is to stay structured, and our parser will be
-designed to enforce this.
+More plausible is ownership references. If quipu start sharing structure,
+as is plausible, it could be nice to know which quipu owns a reference
+and which one is merely containing it. This would let the system decide
+whether an edit in a multiply-linked quipu should trigger a copy or
+obey the default semantics of editing both simultaneously.
 
-Since our pivots are anonymous, we can break any long flat
-data up into ordinary ropes.
+There's also room for one more type of Pivot, before getting into the
+kind of elaborate subclassing that could affect constant factors inside
+the hottest of loops. The case of a pivot with a left pointer and
+a null-like right pointer remains unexplored.
 
-*** Picture
+For a knot, we have 31 chars we  can fit in a token. That's a legal
+limit  in some  languages for  tokens such  as variables.  It holds  the
+string "antidisestablishmentarianism" which strikes  me as sufficient to
+our purposes. One could modify it to "antidisestablishmentarianistic"
+without triggering a resplit or strandout.
+
+It's quite possible this will let us use some vector operation on each
+quipu node, doing all necessary comparisons as a 128 bit mask. That would
+be pretty neat. In particular 128-bit compare for string equality, this
+guarantees us a very hot path indeed for token comparisons. O(n) the
+number of hairs in the string.
+
+Either way the reference implementation should be simple and easy to understand
+and profile.
+
+**** Strands
+
+The Strand struct has an interesting property: the right slot isn't occupied,
+and is only semantically empty. The tail flag defines the entire cell as a
+Strand.
+
+My intention is to store absolutely all strings in Knots, unless performance
+is suffering and I can prove it's libquipu and not the parser or libfemto
+or something else.
+
+strand-outs can therefore have a function pointer in the head slot that
+provides an API for interpreting the resulting pointer. A strand-out could,
+for a very useful case, lead to a syscall that reads more of a file from
+store.
+
+Advanced uses of the quipu contemplate working with large amounts of binary
+data without converting it to strings. We can JIT display regions of that
+data by strandouts and a function pointer interpreting the length and
+region pointer to return a relevant string. By handing around the resulting
+quipu, we can let applications pretend they've had a serialization /
+deserialization cycle.
+
+Strands get added once the core structures and basic operations are built,
+tested, and stable.
+
+** Picture
 
 Here's a lisp tree:
 
@@ -283,13 +358,114 @@ Now let's painstakingly add some pivots.
 #+RESULTS[e3757a81acd6d8009b3ec5aac1911875fb11a583]:
 [[file:images/node-pivot-leaf.png]]
 
-And that's a quipu. Parens and whitespace elided, they don't really help.
+The black lines aren't present below C level, the quipu structure is unaware of
+them. Clearly, they may be traveled by following the pivots.
+
+That's a quipu. Parens and whitespace elided, they don't really help.
 
 There are places to make this more balanced, like pivoting between list 4
 and 5 instead of 5 and 6.
 
 **** DONE Get dot working with Org
      CLOSED: [2015-03-17 Tue 22:19]
+** Properties
+
+One nice property: the syntactics of a Node are present in the quipu
+structure. We may determine what sort of Node we have in the same
+operation that determines that we have a Node in the first place.
+
+This is critically important, because a typical use case keeps the
+Node semantics in a managed environment. Reparses shoudn't need to
+touch an FFI, or they'll be slow, and we hate slow.
+
+Nodes created or deleted during a reparse need to be registered
+with the environment, but that's okay.
+
+What's more important is that semantic operations can be pushed
+down below C level, where they can be fast and stay fast.
+
+Quipu is designed to work with heavily convoluted documents, containing
+multiple syntaxes, with the intention of doing complex operations
+across the resulting data. Operations such as code folding, which are
+conveniences in other languages, are basic to the metalanguage
+environment we're empowering.
+
+** Balancing
+
+Ropes like to be binary and balanced. Parse trees are either n-ary and fairly
+well balanced, or binary and strongly tail-loaded.
+
+I suspect one could get acceptable balance by forcing a left-right structure onto
+n-ary nodes. These pivot nodes would be anonymous so ((foo)(bar)(baz)), which
+we'd often parse
+
+- cons
+  - head :: "foo""
+  - tail :: cons
+    - head :: "bar"
+    - tail :: cons
+      - head :: "baz"
+
+We could instead parse
+
+- list
+ - head :: pivot
+   - head :: pivot
+      - head :: "foo"
+      - tail :: ""bar""
+   - tail :: pivot
+      - head :: "baz"
+
+Leaving out a level of detail to make the picture more clear.
+
+We can see with this small example that it's not growing left. A typical long parse,
+intuitively, will end up balanced with this approach. Balanced enough.
+
+Also worth remembering: We're doing semantic editing with this library. It will,
+almost by definition, have poorer algorithmic characteristics than a structure-unaware
+string of some sort, such as a skip-list rope.
+
+However, we were going to do semantic analysis on that string anyway. Normally this is a
+regular expression driven parse over at least the region under display, with periodic
+full reparses by the language runtime. We can't normally eliminate the latter, at least
+not at first, but the point of a quipu is to perform that semantic analysis and then preserve
+it through various transformations, nearly all of which put the parse tree in a temporary
+state of error.
+
+We can also rebalance off the pivots, by flipping them on and off in various ways. The pivots
+don't affect the semantics of the tree, just the shape, they don't have to be added in
+consistent ways, we can attempt to pivot in the balancing direction each time.
+
+*** Digging in
+
+
+The basic strategy has two types of node.
+
+The initial parse creates semantic nodes, which are n-ary and link
+together. Semantic nodes that aren't unary or binary contain an
+additional two slots.
+
+The  balance  pass  assigns  a  left-right chain  through  each  of  the
+subnodes. The pointers for the first two subnodes go into left and right
+respectively and are distributed among the subnodes accordingly.
+
+Since we know the bias of the nodes, which are aware of their span,
+we can correct for it with our pivot placement.
+
+We now have a quipu, with nodes, some of which are fat, and pivots, which
+give our tree a balanced shape.
+
+We can save these to store by translating the pointers into offsets and compressing the
+node structure into a header. This can be laid out in a cache-friendly way,
+
+The tendency of structured data is to stay structured, and our parser will be
+designed to enforce this.
+
+Since our pivots are anonymous, we can break any long flat
+data up into ordinary ropes.
+** Operations
+
+**** Recognition
 
 ** Algorithmic Properties.
 
@@ -315,7 +491,7 @@ The quipu inherits this, with other interesting properties.
 
 =mark-region= is O(?), where ? is the number of nodes between master and the
 region to be highlighted. This is true of any similar functions, such as
-code folding or most colorizing. What's the average here, n log n?
+code folding or most colorizing. What's the average here?
 
 Operations such as seach-and-replace  or autocomplete become faster when
 restricted to semantic categories. We  can completely skip any subregion
@@ -358,6 +534,12 @@ The basic strategy is to write into blocks allocated from some pool, packing the
 pivots into the front and the strings into the back. The strings should have
 telomeres on both sides, zeroes we can consume with additions, and should be in
 order, so we can strip the strings by pulling off the footers and filtering nulls.
+
+At minimum, front telomeres that make our strings start on a /8 offset will
+likely improve our prospects. In some parsed context many strings will be shorter
+than 8 bytes.
+
+
 
 I haven't the faintest idea how to move the contents around as the quipu are
 juggled. BTW the zeroes in the telomeres are junk, not semantics, the quipu
@@ -403,54 +585,75 @@ provide an equivalent function.
 This is simplistic, there are many questions to answer, but we're past
 the point where continuing to specify is practical. Bottom line, it's a
 DAG, and DAGs have been allocated and freed before.
-** Implementation
+* Implementations
 
-I'd rather write and profile the data structure in LuaJIT,
-then see if there's anything left to optimize. That gives us strings
-that are immutable already, a garbage collector, and a tracing
-JIT, all of which are useful.
+Let's begin with C.
 
-C can't do one of these without refcounts, can it? It seems like
-one of those projects where writing it in C entails writing a
-crappy garbage collector.
+** libquipu
 
-It's a silly question. Cedar at Mesa had a perfectly usable
-garbage-collected rope text editor in the early 80s on a
-computer comparable to my TI-89. Unlike a parser, which literally
-cannot be fast enough, let alone too fast (if a parser could be fast
-enough, it could parse encrypted data, and it cannot), an editor
-just has to be faster than fat-fingered wetbrains.
+*** #include and #define
 
-We do want to add a simple double-pointer pivot type from C,
-and do pivot assignment across the FFI. It's much smaller and we
-use a lot of pivots.
+Tangled into source and header.
 
-The [[http://luajit.org/ext_ffi.html][LuaJIT FFI]] makes this simple.
+#+begin_src C
+//| * libquipu
+//| #summary Provides core data structure for textual operations.
+//| #dependencies @c/standard
+//|
 
-Emacs fails sometimes. That's ancient design and a lot of impedance
-between assumed and actual environment. Judging by when Sublime and
-Emacs pause for me, multiple regex passes are the main slowdown.
+#include <stdio.h>
+#include <stdint.h>
 
-Parse repair. That's the actual hard part.
+#define U_KNOT uintptr_t
+#define PIVOT_VAL
+#define PIVOT_SEM_PTR 93   // arbitrary
+#define STRAND_SEM_PTR 42  // likewise
+#+end_src
 
-On the other hand, having a pure C library is nice, because then
-everyone can use it. Writing anything even slightly complex for the
-first time in pure C is a habit I don't have.
+*** Data Structure
 
-There's also no reason the strings have to be strings. The edges
-could instead define an entry point into a [[http://cr.yp.to/critbit.html][crit bit]] trie. This
-makes the strings themselves immutable, letting us concentrate
-on the data structure.
+Our discriminated union. Tangled into source and header.
 
-It's funny to contemplate but given a preloaded crit bit dictionary,
-adding text will add two additional pointer's worth per unique word or
-phrase. Pointers are fat enough that they're most of the weight,
-clocking in at sixteen asciis for two.
+**** TODO add masks for least byte
 
-At that point, what's even left? The strings, nodes, and pivot chains
-all inhabit separate spaces encouraging the performances they typically
-engage in, and we've spent the minimal amount of memory to obtain
-those separate guarantees.
+#+begin_src C
+//| ** Data structures
 
-This is approximated by using Lua's immutable strings to hold the leaves.
-They're interned into a single data structure that's crit-bit-like.
+union Quipu ;
+
+typedef struct Pivot {
+	union Quipu * left  ;
+	union Quipu * right ;
+	U_KNOT len ;
+	U_KNOT  pivot_v ;
+} Pivot ;
+
+typedef struct Node {
+	union Quipu * left  ;
+	union Quipu * right ;
+	U_KNOT len ;
+	void * sem_ptr ;
+} Node ;
+
+typedef struct Hair {
+	char * str[31] ;
+	char buffer ; // = flag value; 3?
+
+} Hair ;
+
+typedef struct Strand {
+	union Quipu * left  ; // initialized w. customary value
+	union Quipu * right ;
+	U_KNOT len ;
+	U_KNOT strand_v ;
+} Strand ;
+
+typedef union  Quipu {
+    Pivot  pivot   ;
+    Node   node    ;
+    Hair   hair    ;
+    Strand strand  ;
+} Quipu ;
+#+end_src
+
+That might be as far as I get today.
