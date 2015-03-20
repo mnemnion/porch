@@ -619,6 +619,8 @@ Our discriminated union. Tangled into source and header.
 #+begin_src C
 //| ** Data structures
 
+Parse repair. That's the actual hard part.
+
 union Quipu ;
 
 typedef struct Pivot {
