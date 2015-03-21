@@ -1,4 +1,4 @@
-#+options: H:4
+#+options: H:6
 * The Quipu Data Structure
 
 The [[http://en.wikipedia.org/wiki/Rope_%28data_structure%2][rope]] data structure has an interesting quality: it could be implemented
@@ -591,7 +591,8 @@ Let's begin with C.
 
 ** libquipu
 
-*** #include and #define
+*** Implementation
+**** #include and #define
 
 Tangled into source and header.
 
@@ -610,16 +611,14 @@ Tangled into source and header.
 #define STRAND_SEM_PTR 42  // likewise
 #+end_src
 
-*** Data Structure
+**** Data Structure
 
 Our discriminated union. Tangled into source and header.
 
-**** TODO add masks for least byte
+***** TODO add masks for least byte
 
 #+begin_src C
 //| ** Data structures
-
-Parse repair. That's the actual hard part.
 
 union Quipu ;
 
@@ -658,4 +657,86 @@ typedef union  Quipu {
 } Quipu ;
 #+end_src
 
-That might be as far as I get today.
+That might be as far as I get today. It compiles.
+
+**** Pool Allocator
+
+To keep our quipu lined up, we should allocate reasonably large pools,
+and provide knots on demand.
+
+64kB pools would give us 2120 knots per pool, which seems like a reasonable
+number. Good enough for tuning purposes.
+
+It also strikes me as a good number in terms of cleaning up pools that get
+munged up without having to write a whole garbage collector.
+
+*** Assertions
+
+**** The elements of the union are the same size.
+
+Demonstration: malloc() each struct separately.
+
+Confirm they have the same sizeof().
+
+**** The union is of the same size as each element.
+
+Demonstration: allocate a union, and each struct, confirm sizeof().
+
+**** Unions are allocated 64-bit aligned, with no intermediate padding.
+
+Demonstration: Allocate, e.g., 8 unions.
+
+Demonstrate that the addresses are divisible by 64, and that they are precisely
+256 bits incremented.
+
+Repeat this after allocating types of 8, 16, and 32 bytes guaranteed width.
+Show that alignment remains on 64. Show further that the compiler either inserts
+padding or moves the allocation of the pad type to a discrete location, not
+interleaved in our run of 8 unions.
+
+**** Union is properly discriminated
+
+***** Upon Initialization
+
+Allocate each member of a union.
+
+Demonstrate that they can be distinguished via arithetic comparison.
+
+***** Upon Transformation
+
+Demonstrate that:
+
+For all transformations which preserve the identity of the knot,
+the knot may be discriminated arithmetically as still belonging
+to the correct struct class.
+
+For all transformations which change the identity of the knot,
+the knot may be discriminated arithmetically as now belonging
+to the new struct class, and no longer belonging to the old
+struct class.
+
+**** All system calls are handled
+
+Demonstration:
+
+All system calls are tagged "// @syscall" on the line in which they are invoked.
+
+A text file containing all system calls in the standard library is prepared.
+
+A script is written which retrieves all lines containing the string "@syscall".
+
+A script is written which demonstrates that there is a system call on this line.
+
+We confirm that, for all lines retrieved by this script:
+
+       A local variable of type int is created to receive the result.
+       All valid values of type int are handled by the subsequent code.
+
+
+Note that this process contains 2 manual steps which may be performed in error.
+
+It is felt that, at present, this is stronger than proving the correctness
+of a parser which may do this automatically.
+
+Providing acceptable coverage for the indicated scripts is left as an
+exercise, and is considered tractable.
